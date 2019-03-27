@@ -40,6 +40,13 @@ class Task
      */
     private $isDone;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="createdBy", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $createdBy;
+
+
     public function __construct()
     {
         $this->createdAt = new \Datetime();
@@ -90,4 +97,16 @@ class Task
     {
         $this->isDone = $flag;
     }
+
+    // relations with User
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
+
 }
