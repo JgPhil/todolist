@@ -41,7 +41,7 @@ class Task
     private $isDone;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="createdBy", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @ORM\JoinColumn(nullable=true)
      */
     private $createdBy;
