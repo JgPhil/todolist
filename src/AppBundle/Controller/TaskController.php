@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Task;
+use AppBundle\Repository\TaskRepository;
 use AppBundle\Form\TaskType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,9 +14,19 @@ class TaskController extends Controller
     /**
      * @Route("/tasks", name="task_list")
      */
-    public function listAction()
+    public function listAction(TaskRepository $repo)
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('AppBundle:Task')->findAll()]);
+        $tasks = $repo->findBy(["isDone"=> 0]);
+        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
+    }
+
+    /**
+     * @Route("/tasks/done", name="task_done_list")
+     */
+    public function doneListAction(TaskRepository $repo)
+    {
+        $tasks = $repo->findBy(["isDone"=> 1]);
+        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
     }
 
     /**

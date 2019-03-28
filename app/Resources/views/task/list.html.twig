@@ -4,7 +4,9 @@
 
 {% block body %}
     <div class="row">
-        <a href="{{ path('task_create') }}" class="btn btn-info pull-right">Créer une tâche</a>
+        <a href="{{ path('task_create') }}" class="btn btn-success">Créer une nouvelle tâche</a>
+        <a href="{{ path('task_list') }}" class="btn btn-info">Consulter la liste des tâches à faire</a>
+        <a href="{{ path('task_done_list') }}" class="btn btn-primary">Consulter la liste des tâches terminées</a>
     </div>
     <div class="row">
         {% for task in tasks %}
@@ -35,7 +37,7 @@
         </div>
         {% else %}
             <div class="alert alert-warning" role="alert">
-                Il n'y a pas encore de tâche enregistrée. <a href="{{ path('task_create') }}" class="btn btn-warning pull-right">Créer une tâche</a>
+                Il n'y a pas encore de tâche ici.
             </div>
         {% endfor %}
     </div>
