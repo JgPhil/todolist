@@ -23,7 +23,7 @@ class TaskVoter extends Voter
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::EDIT])) {
+        if (!in_array($attribute, [self::EDIT, self::DEL])) {
             return false;
         }
 
@@ -72,7 +72,6 @@ class TaskVoter extends Voter
         if ($this->decisionManager->decide($this->token, ['ROLE_ADMIN'])) {
             return true;
         }
-
         return $user === $task->getCreatedBy();
     }
 }
