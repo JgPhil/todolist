@@ -11,6 +11,7 @@ class TaskVoter extends Voter
 {
     const EDIT = 'edit';
     const DEL = 'delete';
+    const TOGGLE = 'toggle';
 
     private $decisionManager;
     private $token;
@@ -23,7 +24,7 @@ class TaskVoter extends Voter
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::EDIT, self::DEL])) {
+        if (!in_array($attribute, [self::EDIT, self::DEL, self::TOGGLE])) {
             return false;
         }
 
@@ -54,6 +55,10 @@ class TaskVoter extends Voter
                 return $this->canEdit($task, $user);
             case self::DEL:
                 return $this->canDelete($task, $user);
+            case self::TOGGLE:
+                return $this->canToggle($task, $user);
+            default :
+                return false;
         }
 
         throw new \LogicException('This code should not be reached!');
@@ -61,6 +66,7 @@ class TaskVoter extends Voter
 
     private function canEdit(Task $task, User $user)
     {
+        // if user is ROLE_ADMIN he can edit the anonymous task
         if ($task->getCreatedBy() == null && $this->decisionManager->decide($this->token, ['ROLE_ADMIN'])) {
             return true;
         }
@@ -68,6 +74,14 @@ class TaskVoter extends Voter
     }
 
     private function canDelete(Task $task, User $user)
+    {
+        if ($this->decisionManager->decide($this->token, ['ROLE_ADMIN'])) {
+            return true;
+        }
+        return $user === $task->getCreatedBy();
+    }
+
+    private function canToggle(Task $task, User $user)
     {
         if ($this->decisionManager->decide($this->token, ['ROLE_ADMIN'])) {
             return true;
