@@ -39,6 +39,12 @@ class User implements UserInterface
      */
     private $email;
 
+    /**
+     * @ORM\Column(type="simple_array")
+     * @Assert\NotBlank(message="Vous devez saisir une adresse email.")
+     */
+    private $roles;
+
     public function getId()
     {
         return $this->id;
@@ -81,7 +87,16 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return $this->roles;
+        // return array('ROLE_USER');
+    }
+
+    public function setRoles(array $roles)
+    {
+        // penser a verifier le $roles correctement formé ROLE_
+
+        $this->roles = $roles;
+        // $this->roles = explode(',', $roles);
     }
 
     public function eraseCredentials()

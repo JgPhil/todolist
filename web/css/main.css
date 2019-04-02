@@ -1,0 +1,8 @@
+/*
+ * Main CSS Files for the ToDoList App
+ */
+
+/* override bootstrap class */
+.icon-bar {
+    background-color: black;
+}

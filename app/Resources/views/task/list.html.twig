@@ -3,33 +3,42 @@
 {% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">{% endblock %}
 
 {% block body %}
-    <a href="{{ path('task_create') }}" class="btn btn-info pull-right">Créer une tâche</a>
     <div class="row">
         {% for task in tasks %}
         <div class="col-sm-4 col-lg-4 col-md-4">
-            <div class="thumbnail">
-                <div class="caption">
+            <div class="panel {% if task.isDone %}panel-success{% else %}panel-warning{% endif %}">
+                <div class="panel-heading">
                     <h4 class="pull-right">
-                        {% if task.isDone %}<span class="glyphicon glyphicon-ok"></span>{% else %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+                        {% if task.isDone %}<span class="glyphicon glyphicon-ok"></span>{% endif %}
                     </h4>
-                    <h4><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a></h4>
-                    <p>{{ task.content }}</p>
+                    <h4><a href="{{ path('task_edit', {'id' : task.id }) }}"><span class="glyphicon glyphicon-pencil"></span> {{ task.title }}</a></h4>
                 </div>
-                <div>
-                    <form action="{{ path('task_toggle', {'id' : task.id }) }}">
-                        <button class="btn btn-success btn-sm pull-right">
-                            {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
-                        </button>
-                    </form>
-                    <form action="{{ path('task_delete', {'id' : task.id }) }}">
-                        <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
-                    </form>
+                <div class="panel-body">
+                    <p>{{ task.content }}</p>
+                    <small>
+                        <em>Par :</em> {% if task.createdBy %} {{ task.createdBy.username }} {% else %} Anonyme {% endif %}<br>
+                        <em>Le : </em> {{ task.createdAt|date("d-m-Y à H:i") }}
+                    </small>
+                </div>
+                <div class="panel-footer">
+                    <div class="btn-group">
+                        <a href="{{ path('task_toggle', {'id' : task.id }) }}" class="btn {% if task.isDone %}btn-warning{% else %}btn-success{% endif %} btn-sm">
+                            {% if task.isDone %}
+                                <span class="glyphicon glyphicon-remove"></span> Marquer non terminée
+                            {% else %}
+                                <span class="glyphicon glyphicon-ok"></span> Marquer comme faite
+                            {% endif %}
+                        </a>
+                        <a href="{{ path('task_delete', {'id' : task.id }) }}" class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-trash"></span> Supprimer
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
         {% else %}
             <div class="alert alert-warning" role="alert">
-                Il n'y a pas encore de tâche enregistrée. <a href="{{ path('task_create') }}" class="btn btn-warning pull-right">Créer une tâche</a>
+                Il n'y a pas encore de tâche ici.
             </div>
         {% endfor %}
     </div>
