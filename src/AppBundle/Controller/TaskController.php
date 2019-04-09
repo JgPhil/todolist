@@ -17,7 +17,7 @@ class TaskController extends Controller
     public function listAction(TaskRepository $repo)
     {
         $tasks = $repo->findBy(["isDone"=> 0]);
-        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
+        return $this->render('task/list.html.twig', ['tasks' => $tasks, 'list_type' => 'à faire']);
     }
 
     /**
@@ -26,7 +26,7 @@ class TaskController extends Controller
     public function doneListAction(TaskRepository $repo)
     {
         $tasks = $repo->findBy(["isDone"=> 1]);
-        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
+        return $this->render('task/list.html.twig', ['tasks' => $tasks, 'list_type' => 'faites']);
     }
 
     /**
