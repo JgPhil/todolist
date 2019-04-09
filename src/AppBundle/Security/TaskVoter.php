@@ -13,13 +13,7 @@ class TaskVoter extends Voter
     const DEL = 'delete';
     const TOGGLE = 'toggle';
 
-    private $decisionManager;
     private $token;
-
-    public function __construct(AccessDecisionManagerInterface $decisionManager)
-    {
-        $this->decisionManager = $decisionManager;
-    }
 
     protected function supports($attribute, $subject)
     {
@@ -57,8 +51,6 @@ class TaskVoter extends Voter
                 return $this->canDelete($task, $user);
             case self::TOGGLE:
                 return $this->canToggle($task, $user);
-            default :
-                return false;
         }
 
         throw new \LogicException('This code should not be reached!');
@@ -67,7 +59,7 @@ class TaskVoter extends Voter
     private function canEdit(Task $task, User $user)
     {
         // if user is ROLE_ADMIN he can edit the anonymous task
-        if ($task->getCreatedBy() == null && $this->decisionManager->decide($this->token, ['ROLE_ADMIN'])) {
+        if ($task->getCreatedBy() == null && $user->isAdmin()) {
             return true;
         }
         return $user === $task->getCreatedBy();
@@ -75,17 +67,11 @@ class TaskVoter extends Voter
 
     private function canDelete(Task $task, User $user)
     {
-        if ($this->decisionManager->decide($this->token, ['ROLE_ADMIN'])) {
-            return true;
-        }
-        return $user === $task->getCreatedBy();
+        return $user->isAdmin() || $user === $task->getCreatedBy();
     }
 
     private function canToggle(Task $task, User $user)
     {
-        if ($this->decisionManager->decide($this->token, ['ROLE_ADMIN'])) {
-            return true;
-        }
-        return $user === $task->getCreatedBy();
+        return $user->isAdmin() || $user === $task->getCreatedBy();
     }
 }

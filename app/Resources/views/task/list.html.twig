@@ -4,6 +4,11 @@
 
 {% block body %}
     <div class="row">
+        <div class="col-xs-12">
+            <h3>Voici la liste des tâches {{ list_type }} :</h3>            
+        </div>
+    </div>
+    <div class="row">
         {% for task in tasks %}
         <div class="col-sm-4 col-lg-4 col-md-4">
             <div class="panel {% if task.isDone %}panel-success{% else %}panel-warning{% endif %}">

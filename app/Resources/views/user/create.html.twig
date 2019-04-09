@@ -5,6 +5,11 @@
 
 {% block body %}
     <div class="row">
+        <div class="col-xs-12">
+            <h3>Formulaire de creation d'utilisateur' :</h3>            
+        </div>
+    </div>
+    <div class="row">
         {{ form_start(form, {'action' : path('user_create')}) }}
             {{ form_widget(form) }}
 

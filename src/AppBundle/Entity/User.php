@@ -88,16 +88,19 @@ class User implements UserInterface
     public function getRoles()
     {
         return $this->roles;
-        // return array('ROLE_USER');
     }
 
     public function setRoles(array $roles)
     {
         // penser a verifier le $roles correctement formé ROLE_
-
         $this->roles = $roles;
-        // $this->roles = explode(',', $roles);
     }
+
+    public function isAdmin()
+    {
+        return in_array('ROLE_ADMIN', $this->roles);
+    }
+
 
     public function eraseCredentials()
     {
