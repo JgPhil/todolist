@@ -13,8 +13,6 @@ class TaskVoter extends Voter
     const DEL = 'delete';
     const TOGGLE = 'toggle';
 
-    private $token;
-
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
@@ -30,19 +28,14 @@ class TaskVoter extends Voter
         return true;
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $task, TokenInterface $token)
     {
-        $this->token = $token;
-        $user = $this->token->getUser();
+        $user = $token->getUser();
 
         if (!$user instanceof User) {
             // the user must be logged in; if not, deny access
             return false;
         }
-
-        // you know $subject is a Task object, thanks to supports
-        /** @var Task $task */
-        $task = $subject;
 
         switch ($attribute) {
             case self::EDIT:
@@ -52,8 +45,6 @@ class TaskVoter extends Voter
             case self::TOGGLE:
                 return $this->canToggle($task, $user);
         }
-
-        throw new \LogicException('This code should not be reached!');
     }
 
     private function canEdit(Task $task, User $user)
@@ -62,6 +53,7 @@ class TaskVoter extends Voter
         if ($task->getCreatedBy() == null && $user->isAdmin()) {
             return true;
         }
+        
         return $user === $task->getCreatedBy();
     }
 

@@ -4,39 +4,44 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
+use AppBundle\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
-class UserController extends Controller
+    /**
+     * @Route("/users", name="user_")
+     */
+class UserController extends AbstractController
 {
     /**
-     * @Route("/users", name="user_list")
+     * @Route("/", name="list")
      */
-    public function listAction()
+    public function list(UserRepository $repo)
     {
-        return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('AppBundle:User')->findAll()]);
+        return $this->render('user/list.html.twig', ['users' => $repo->findAll()]);
     }
 
     /**
-     * @Route("/users/create", name="user_create")
+     * @Route("/create", name="create")
      */
-    public function createAction(Request $request)
+    public function create(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $manager)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $password = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $em->persist($user);
-            $em->flush();
+            $manager->persist($user);
+            $manager->flush();
 
-            $this->addFlash('success', "L'utilisateur a bien été ajouté.");
+            $this->addFlash('success', sprintf("L'utilisateur %s a bien été ajouté.", $user->getUsername()));
 
             return $this->redirectToRoute('user_list');
         }
@@ -45,21 +50,22 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/users/{id}/edit", name="user_edit")
+     * @Route("/{id}/edit", name="edit", requirements={"id"="\d+"})
      */
-    public function editAction(User $user, Request $request)
+    public function edit(User $user, Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $manager)
     {
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $password = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $this->getDoctrine()->getManager()->flush();
+            $manager->persist($user);
+            $manager->flush();
 
-            $this->addFlash('success', "L'utilisateur a bien été modifié");
+            $this->addFlash('success', sprintf("L'utilisateur %s a bien été modifié.", $user->getUsername()));
 
             return $this->redirectToRoute('user_list');
         }

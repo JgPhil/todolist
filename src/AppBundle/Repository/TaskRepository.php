@@ -17,4 +17,14 @@ class TaskRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Task::class);
     }
+
+    public function findByDone()
+    {
+        return $this->findBy(["isDone"=> 1]);
+    }
+
+    public function findByNotDone()
+    {
+        return $this->findBy(["isDone"=> 0]);
+    }
 }
