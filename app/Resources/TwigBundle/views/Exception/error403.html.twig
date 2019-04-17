@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block header_title %}
+    <h1 class="text-danger"><span style="color: red;"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span></span> Erreur 403 : Accés refusé</h1>
+{% endblock %}
+
+{% block header_img %} {% endblock %}
+
+{% block body %}
+    <h3>Vous n'êtes pas autorisé à accéder à cette page.</h3>
+    <p>
+    	Verifiez que vous êtes bien connecté puis verifiez votre barre d'adresse. <br>
+    	Vous pouvez vous rendre sur <a href="{{ path('homepage') }}">la page d'accueil</a> et contacter votre administrateur pour obtenir les droits necessaires.
+    </p>
+{% endblock %}

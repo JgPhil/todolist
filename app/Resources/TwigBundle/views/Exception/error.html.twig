@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block header_title %}
+    <h1 class="text-danger"><span style="color: red;"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span></span> Erreur : Le systeme à rencontré une erreur.</h1>
+{% endblock %}
+
+{% block header_img %} {% endblock %}
+
+{% block body %}
+    <h3>La demande ne peut être satisfaite.</h3>
+    <p>
+    	Retournez sur <a href="{{ path('homepage') }}">la page d'accueil</a>.
+    </p>
+{% endblock %}

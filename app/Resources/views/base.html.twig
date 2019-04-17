@@ -67,7 +67,7 @@
                         <li><a href="{{ path('login') }}"><span style="color: green;"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></span> Se connecter</a></li>
                         {% endif %}
                         {% if app.user %}
-                        <li><a href="{{ path('logout') }}"><span style="color: red;"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></span> Se déconnecter</a></li>
+                        <li><a href="{{ path('logout') }}"><span style="color: red;"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></span> <strong>{{ app.user.username }}</strong></a></li>
                         {% endif %}
                     </ul>
                 </div>
