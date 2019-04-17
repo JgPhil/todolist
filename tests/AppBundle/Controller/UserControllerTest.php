@@ -34,6 +34,7 @@ class UserControllerTest extends WebTestCase
     {
         $this->logIn(['ROLE_ADMIN']);
         $crawler = $this->client->request('GET', '/users');
+        $this->client->followRedirect();
         $this->assertContains("liste des Utiisateurs", $this->client->getResponse()->getContent());
     }
 
@@ -72,7 +73,7 @@ class UserControllerTest extends WebTestCase
         $form['user[roles]'] = 'ROLE_USER';
         $this->client->submit($form);
         $this->client->followRedirect();
-        $this->assertContains("utilisateur a bien été ajouté", $this->client->getResponse()->getContent());
+        $this->assertContains("a bien été ajouté", $this->client->getResponse()->getContent());
     }
 
     //Edit scenarii
@@ -110,6 +111,6 @@ class UserControllerTest extends WebTestCase
         $form['user[roles]'] = 'ROLE_USER';
         $this->client->submit($form);
         $this->client->followRedirect();
-        $this->assertContains("utilisateur a bien été modifié", $this->client->getResponse()->getContent());
+        $this->assertContains("a bien été modifié", $this->client->getResponse()->getContent());
     }
 }

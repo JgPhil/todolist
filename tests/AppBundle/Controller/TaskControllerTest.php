@@ -12,17 +12,14 @@ class TaskControllerTest extends WebTestCase
 {
     private $client = null;
     private $entityManager;
-    private $testTaskId;
 
     public function setUp()
     {
         $this->client = static::createClient();
 
-
         $this->entityManager = $this->client->getContainer()
             ->get('doctrine')
             ->getManager();
-
     }
 
     // fake user enought to access some part of the site
@@ -65,6 +62,7 @@ class TaskControllerTest extends WebTestCase
     {
         $this->logIn(['ROLE_USER']);
         $crawler = $this->client->request('GET', '/tasks');
+        $this->client->followRedirect();
         $this->assertContains("liste des tâches à faire", $this->client->getResponse()->getContent());
     }
 
@@ -92,7 +90,7 @@ class TaskControllerTest extends WebTestCase
         $form['task[content]'] = 'content';
         $this->client->submit($form);
         $this->client->followRedirect();
-        $this->assertContains("La tâche a été bien été ajoutée", $this->client->getResponse()->getContent());
+        $this->assertContains("a bien été ajoutée", $this->client->getResponse()->getContent());
     }
 
     //Edit scenarii
@@ -107,7 +105,7 @@ class TaskControllerTest extends WebTestCase
         $form['task[content]'] = 'content_modif' . $time;
         $this->client->submit($form);
         $this->client->followRedirect();
-        $this->assertContains("La tâche a bien été modifiée", $this->client->getResponse()->getContent());
+        $this->assertContains("a bien été modifiée", $this->client->getResponse()->getContent());
         $this->assertContains('title_modif_' . $time, $this->client->getResponse()->getContent());
     }
 
@@ -132,5 +130,16 @@ class TaskControllerTest extends WebTestCase
         $this->logIn(['ROLE_USER']);
         $crawler = $this->client->request('GET', '/tasks/1/toggle');
         $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testTaskToggleDoubleOk()
+    {
+        $this->logInRealUser(1);
+        $crawler = $this->client->request('GET', '/tasks/1/toggle');
+        $this->client->followRedirect();
+        $this->assertContains("a bien été marquée", $this->client->getResponse()->getContent());
+        $crawler = $this->client->request('GET', '/tasks/1/toggle');
+        $this->client->followRedirect();
+        $this->assertContains("a bien été marquée", $this->client->getResponse()->getContent());
     }
 }
