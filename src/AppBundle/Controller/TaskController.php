@@ -44,12 +44,11 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             $task->setCreatedBy($user);
 
-            $em->persist($task);
-            $em->flush();
+            $manager->persist($task);
+            $manager->flush();
 
             $this->addFlash('success', sprintf('La tâche %s a bien été ajoutée.', $task->getTitle()));
 
