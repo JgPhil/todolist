@@ -35,24 +35,24 @@ private $encoder;
         $manager->persist($user);
 
         // create 3 Tasks
-        $task1 = new Task();
-        $task1->setTitle('Tache_Fixture_1');
-        $task1->setContent('Tache Fixture Content : 1_' . time());
-        $task1->setCreatedBy($admin);
-        $manager->persist($task1);
-
-        $task2 = new Task();
-        $task2->setTitle('Tache_Fixture_2');
-        $task2->setContent('Tache Fixture Content : 2_' . time());
-        $task2->setCreatedBy($user);
-        $manager->persist($task2);
-
-        $task3 = new Task();
-        $task3->setTitle('Tache_Fixture_2');
-        $task3->setContent('Tache Fixture Content : 3_' . time());
-        $task3->setCreatedBy(null);
-        $manager->persist($task3);
-
-        $manager->flush();
+        for ($i=1; $i < 4; $i++) { 
+            $task = new Task();
+            $task->setTitle('Tache_Fixture_' . $i);
+            $task->setContent('Tache Fixture Content : ' . $i);
+            switch ($i) {
+                case 1 :
+                    $byUser = $admin;
+                    break;
+                case 2 :
+                    $byUser = $user;
+                    break;
+                default:
+                    $byUser = null;
+                    break;
+            }
+            $task->setCreatedBy($byUser);
+            $manager->persist($task);
+        }
+        $manager->flush();       
     }
 }
