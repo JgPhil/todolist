@@ -50,7 +50,7 @@ class TaskVoter extends Voter
     private function canEdit(Task $task, User $user)
     {
         // if user is ROLE_ADMIN he can edit the anonymous task
-        if ($task->getCreatedBy() == null && $user->isAdmin()) {
+        if ($task->getCreatedBy() === null && $user->isAdmin()) {
             return true;
         }
         
