@@ -41,7 +41,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="simple_array")
-     * @Assert\NotBlank(message="Vous devez saisir une adresse email.")
+     * @Assert\NotBlank(message="Vous devez choisir un rôle.")
      */
     private $roles;
 
