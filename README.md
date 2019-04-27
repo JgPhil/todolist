@@ -4,8 +4,6 @@ ToDoList
 Projet 8 du parcours DA PHP/Symfony de OpenClassrooms
 - lien fichier Git : https://github.com/webyves/todolist
 
-# Code Validation
-
 # Installation Notes (PAR SSH)
 1) Cloner le repository sur votre serveur
 3) Utiliser composer pour installer et mettre a jour les composant avec la commande 
@@ -20,5 +18,8 @@ Projet 8 du parcours DA PHP/Symfony de OpenClassrooms
 5) envoyer les fixtures
 	- php bin/console doctrine:fixtures:load
 
+# Comment contribuer 
+Si vous souhaitez apporter vos ressources a ce projet rendez vous sur le liens suivant pour savoir comment faire : 
+https://github.com/webyves/todolist/blob/master/CONTRIBUTING.md
 
 # Patch Notes
